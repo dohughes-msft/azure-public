@@ -2,7 +2,7 @@
 .SYNOPSIS
     Take a collection of given resource IDs and return the cost history for those resources. For this we use the Microsoft.CostManagement provider
     of the resource group containing the resource.
-    Requires Az.CostManagement module
+    Requires Az.CostManagement module 0.4.2 or later.
 
 .PARAMETER ParameterName
     $resourceID[] (mandatory) : The resource IDs of the resources to be examined
@@ -27,22 +27,27 @@
 #>
 
 param (
-    [Parameter(Mandatory=$true)][string[]]$resourceId,
+    [Parameter(Mandatory=$true)][string[]]$resourceIds,
     [string]$startDate = (Get-Date).AddMonths(-6).ToString("yyyy-MM-01"),               # the first day of the month 6 months ago
     [string]$endDate = (Get-Date).AddDays(-1 * (Get-Date).Day).ToString("yyyy-MM-dd")   # the last day of the previous month
 )
 
+# Check if the needed modules are installed
+if (-not (Get-Module -ListAvailable -Name Az.CostManagement)) {
+    Write-Error "Az.CostManagement module is not installed. Please install it using 'Install-Module -Name Az.CostManagement'."
+    exit 1
+}
+
 # Timeframe
 # Supported types are BillingMonthToDate, Custom, MonthToDate, TheLastBillingMonth, TheLastMonth, WeekToDate
-$timeframe = "Custom"            
+$timeframe = "Custom"
 
 # Granularity
 # Supported types are Daily and Monthly so far. Omit just to get the total cost.
-$granularity = "Monthly"         
+$granularity = "Monthly"
 
 # Type
 # Supported types are Usage (deprecated), ActualCost, and AmortizedCost
-# https://stackoverflow.com/questions/68223909/in-the-azure-consumption-usage-details-api-what-is-the-difference-between-the-m
 $type = "AmortizedCost"          
 
 # Scope
@@ -60,11 +65,10 @@ Invoice section scope    : /providers/Microsoft.Billing/billingAccounts/{billing
 Partner scope            : /providers/Microsoft.Billing/billingAccounts/{billingAccountId}/customers/{customerId}
 
 For a customer with a Microsoft Enterprise Agreement or Microsoft Customer Agreement, billing account scope is recommended. #>
-$scope = "/subscriptions/f3bd1cf9-6b3f-4fda-b3f9-83e9467674cf"
+#$scope = "/providers/Microsoft.Billing/billingAccounts/12345678"
 
-# For testing purposes the resource group of the first resource ID could be used.
-#$scope = ""
-#$resourceId[0].Split("/")[1..4] | ForEach-Object {$scope += "/$_"}
+# For testing purposes the subscription of the first resource ID could be used.
+$scope = $resourceIds[0].Split("/")[0..2] -join "/"
 
 # Grouping
 <# Dimensions for grouping the output. Valid dimensions for grouping are:
@@ -121,7 +125,7 @@ $aggregation = @{
 
 # Filter
 # In this script we use dimension resource ID as a filter
-$dimensions = New-AzCostManagementQueryComparisonExpressionObject -Name 'ResourceId' -Value $resourceId -Operator 'In'
+$dimensions = New-AzCostManagementQueryComparisonExpressionObject -Name 'ResourceId' -Value $resourceIds
 $filter = New-AzCostManagementQueryFilterObject -Dimensions $dimensions
 
 $queryResult = Invoke-AzCostManagementQuery `
@@ -132,9 +136,11 @@ $queryResult = Invoke-AzCostManagementQuery `
     -TimePeriodFrom $startDate `
     -TimePeriodTo $endDate `
     -DatasetGrouping $grouping `
-    -DatasetAggregation $aggregation `
-    -DatasetGranularity $granularity `
-    -Debug
+    -DatasetAggregation $aggregation
+#    -DatasetGranularity $granularity
+#    -Debug
+
+#$queryResult | ConvertTo-Json -Depth 10 | Out-File -FilePath "cost_history.json"
 
 # Convert the query result into a table
 $table = @()
@@ -146,4 +152,5 @@ for ($i = 0; $i -lt $queryResult.Row.Count; $i++) {
     $table += $row
 }
 
+#$table | Export-Csv -Path "cost_history.csv"
 $table | Format-Table -AutoSize
