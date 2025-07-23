@@ -6,7 +6,7 @@
 .PARAMETER billingProfileName
     The name of the billing profile for which the price sheet is requested.
 .EXAMPLE
-    .\get_azure_customer_pricing_mca.ps1 -billingAccountId "8611537" -billingPeriod "202507"
+    .\get_azure_customer_pricing_mca.ps1 -billingAccountName "Contoso" -billingProfileName "DepartmentA"
 .NOTES
     https://learn.microsoft.com/en-us/rest/api/cost-management/price-sheet/download-by-billing-profile
 #>

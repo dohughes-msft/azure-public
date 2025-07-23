@@ -6,7 +6,7 @@
 .PARAMETER billingPeriod
     The billing period for which the price sheet is requested. Defaults to the current month if not specified.
 .EXAMPLE
-    .\get_azure_customer_pricing_ea.ps1 -billingAccountId "8611537" -billingPeriod "202507"
+    .\get_azure_customer_pricing_ea.ps1 -billingAccountId "1234567" -billingPeriod "202507"
 .NOTES
     https://learn.microsoft.com/en-us/rest/api/cost-management/price-sheet/download-by-billing-account
 #>
