@@ -1,0 +1,52 @@
+[
+    {
+        "id": "pip01",
+        "label": "PublicIPRedundancy",
+        "description": "Show public IP addresses and their redundancy settings",
+        "usecases": [
+            "WARA",
+            "SAPWARR"
+        ],
+        "table": "resources",
+        "queryBody": "| where type == 'microsoft.network/publicipaddresses' | extend skuName = tostring(sku.name), skuTier = tostring(sku.tier), zones = tostring(zones) | project subscriptionId, resourceGroup, name, location, skuName, skuTier, zones = iif(zones == '', 'None', zones)"
+    },
+    {
+        "id": "nic01",
+        "label": "UnattachedNICs",
+        "description": "Show unattached NICs (note: some NICs not attached to VMs may still be in use, e.g., private endpoints)",
+        "usecases": [
+            "WACOA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type == 'microsoft.network/networkinterfaces' and isempty(properties.virtualMachine.id)"
+    },
+    {
+        "id": "pip02",
+        "label": "UnattachedPublicIPs",
+        "description": "Show unattached public IPs",
+        "usecases": [
+            "WACOA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type == 'microsoft.network/publicipaddresses' and isempty(properties.ipConfiguration.id)"
+    },
+    {
+        "id": "vn01",
+        "label": "VNETOverview",
+        "description": "Show VNETs with their address spaces, subnets, and NSGs",
+        "usecases": [],
+        "table": "resources",
+        "queryBody": "| where type =~ 'Microsoft.Network/virtualNetworks' | where subscriptionId in ( '7512593c-5721-4acc-a276-f5976e03b17a') | extend addressSpace = properties.addressSpace.addressPrefixes | mvexpand addressSpace | extend subnets = properties.subnets | mvexpand subnets | extend subnetName = tostring(subnets.name), subnetAddressPrefix = tostring(subnets.properties.addressPrefix), nsgId = tostring(subnets.properties.networkSecurityGroup.id) | project vnetName = name, addressSpace, subnetName, subnetAddressPrefix, nsgName = split(nsgId, '/')[-1]"
+    },
+    {
+        "id": "vn02",
+        "label": "VNETDDoS",
+        "description": "Show VNETs with their DDoS protection settings",
+        "usecases": [
+            "WASA",
+            "SAPWARR"
+        ],
+        "table": "resources",
+        "queryBody": "| where type =~ 'Microsoft.Network/virtualNetworks' | extend ddosProtectionPlan = properties.enableDdosProtection, ddosProtectionPlanId = properties.ddosProtectionPlan.id | project subscriptionId, resourceGroup, vnetName = name, location, ddosProtectionPlan, ddosProtectionPlanId"
+    }
+]

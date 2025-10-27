@@ -1,0 +1,17 @@
+[
+    {
+        "id": "gen01",
+        "label": "AllResources",
+        "description": "Show all resources",
+        "usecases": [
+            "WARA",
+            "WACOA",
+            "SAPWARR",
+            "WAPA",
+            "WASA",
+            "AGPS"
+        ],
+        "table": "resources",
+        "queryBody": "| project subscriptionId, name, type, location"
+    }
+]

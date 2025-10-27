@@ -1,0 +1,22 @@
+[
+    {
+        "id": "anf01",
+        "label": "ANFFillLevel",
+        "description": "Get list of ANF volumes for fill level analysis",
+        "usecases": [
+            "WACOA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type == 'microsoft.netapp/netappaccounts/capacitypools/volumes' | project name, id, size=properties.usageThreshold, tier=properties.serviceLevel | order by name"
+    },
+    {
+        "id": "anf02",
+        "label": "ANFVolumeSizes",
+        "description": "Show NetApp accounts, pools, volumes and their sizes",
+        "usecases": [
+            "WACOA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type == 'microsoft.netapp/netappaccounts/capacitypools/volumes' | project subscriptionId, resourceGroup, location, name, account = split(name, '/')[0], pool = split(name, '/')[1], volume = split(name, '/')[2], tier = properties.serviceLevel, sizeTB = properties.usageThreshold/1024/1024/1024, tags"
+    }
+]

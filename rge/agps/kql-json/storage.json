@@ -1,0 +1,44 @@
+[
+    {
+        "id": "stg01",
+        "label": "StorageAccountsSKU",
+        "description": "List storage accounts together with their SKU",
+        "usecases": [
+            "WAPA",
+            "WARA",
+            "WACOA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type == 'microsoft.storage/storageaccounts' | extend sku = tostring(sku.name) | project subscriptionId, resourceGroup, name, location, kind, sku"
+    },
+    {
+        "id": "stg02",
+        "label": "StorageAccountPremium",
+        "description": "Show premium blob/file storage accounts",
+        "usecases": [
+            "WACOA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type == 'microsoft.storage/storageaccounts' and tostring(sku.name) matches regex ('Premium*')"
+    },
+    {
+        "id": "stg03",
+        "label": "StorageAccountLCM",
+        "description": "Show storage accounts without any lifecycle management policies",
+        "usecases": [
+            "WACOA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type == 'microsoft.storage/storageaccounts' | extend subId = tostring(split(id, '/', 2)[0]), resourceGroup = tostring(split(id, '/', 4)[0]) | project subId, resourceGroup, name | join kind=leftouter (resources | where type == 'microsoft.storage/storageaccounts/managementPolicies' | extend subId = tostring(split(id, '/', 2)[0]), resourceGroup = tostring(split(id, '/', 4)[0]) | project subId, resourceGroup, name) on subId, resourceGroup, name | where isnull(name1)"
+    },
+    {
+        "id": "stg04",
+        "label": "StorageAccountSecurity",
+        "description": "Storage account security settings (public network access, TLS, allowed clients, HTTPS only)",
+        "usecases": [
+            "WASA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type == 'microsoft.storage/storageaccounts' | extend publicNetworkAccess = iif(properties.publicNetworkAccess == 'Disabled', 'Disabled', 'Enabled'), minimumTlsVersion = tostring(properties.minimumTlsVersion), clients = array_length(properties.networkAcls.ipRules), httpsOnly = properties.supportsHttpsTrafficOnly | extend allowedClients = iff(clients==0,'All',tostring(clients)) | project subscriptionId, resourceGroup, name, location, kind, skuName = sku.name, publicNetworkAccess, allowedClients, minimumTlsVersion, httpsOnly"
+    }
+]

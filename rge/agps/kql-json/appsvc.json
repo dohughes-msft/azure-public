@@ -1,0 +1,22 @@
+[   
+    {
+        "id": "asv01",
+        "label": "AppServices",
+        "description": "App Services",
+        "usecases": [
+            "WARA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type =~ 'microsoft.web/sites' | extend instanceCount = toint(properties.siteConfig.numberOfWorkers) | extend inASE = isnotnull(properties.hostingEnvironmentProfile) | project subscriptionId, resourceGroup, name, location, instanceCount, inASE"
+    },
+    {
+        "id": "asv02",
+        "label": "AppServicePlans",
+        "description": "App Service Plans",
+        "usecases": [
+            "WARA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type =~ 'Microsoft.Web/serverfarms' | extend zoneRedundant = tostring(properties.zoneRedundant) | project subscriptionId, resourceGroup, name, location, zoneRedundant"
+    }
+]

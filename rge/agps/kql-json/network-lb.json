@@ -1,0 +1,33 @@
+[
+    {
+        "id": "lb01",
+        "label": "LoadBalancerZones",
+        "description": "Show load balancers and their zone settings",
+        "usecases": [
+            "WARA",
+            "SAPWARR"
+        ],
+        "table": "resources",
+        "queryBody": "| where type == 'microsoft.network/loadbalancers' | mv-expand fipc = properties.frontendIPConfigurations | extend IPConfigName = fipc.name | extend zones = tostring(fipc.zones) | project subscriptionId, resourceGroup, name, IPConfigName, zones = iif(zones == '', 'None', zones)"
+    },
+    {
+        "id": "lb02",
+        "label": "LoadBalancerIdleTimeout",
+        "description": "List load balancers and their idle timeout settings",
+        "usecases": [
+            "SAPWARR"
+        ],
+        "table": "resources",
+        "queryBody": "| where type == 'microsoft.network/loadbalancers' | mv-expand lbr = properties.loadBalancingRules | extend ruleName = lbr.name, idleTimeout = lbr.properties.idleTimeoutInMinutes | project subscriptionId, resourceGroup, location, lbName = name, ruleName, idleTimeout"
+    },
+    {
+        "id": "lb03",
+        "label": "LoadBalancerEmptyBackend",
+        "description": "Show load balancers with empty backend pool",
+        "usecases": [
+            "WACOA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type == 'microsoft.network/loadbalancers' and isempty(properties.backendAddressPools[0].properties.backendAddresses[0])"
+    }
+]

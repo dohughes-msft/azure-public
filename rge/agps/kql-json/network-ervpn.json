@@ -1,0 +1,35 @@
+[
+    {
+        "id": "ervpn01",
+        "label": "ExpressRouteCircuits",
+        "description": "Show ExpressRoute circuits",
+        "usecases": [
+            "WARA",
+            "SAPWARR"
+        ],
+        "table": "resources",
+        "queryBody": "| where type == 'microsoft.network/expressroutecircuits' | project circuitName = name, circuitId = id, location, resourceGroup"
+    },
+    {
+        "id": "ervpn02",
+        "label": "ExpressRouteGateways",
+        "description": "Show ER/VPN gateways",
+        "usecases": [
+            "WARA",
+            "SAPWARR"
+        ],
+        "table": "resources",
+        "queryBody": "| where type == 'microsoft.network/virtualnetworkgateways' | project subscriptionId, resourceGroup, name, location, sku = properties.sku.name, type = properties.gatewayType"
+    },
+    {
+        "id": "ervpn03",
+        "label": "ERConnections",
+        "description": "Show interconnections between ExpressRoute circuits and gateways",
+        "usecases": [
+            "WARA",
+            "SAPWARR"
+        ],
+        "table": "resources",
+        "queryBody": "| where type == 'microsoft.network/connections' | extend circuitId = tostring(properties.expressRouteCircuit.id), gatewayId = tostring(properties.expressRouteGateway.id) | project connectionName = name, circuitId, gatewayId"
+    }
+]

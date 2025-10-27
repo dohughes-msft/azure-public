@@ -1,0 +1,42 @@
+[
+    {
+        "id": "nsg01",
+        "label": "NSGRules",
+        "description": "List NSGs with the number of default and customer rules",
+        "usecases": [
+            "WASA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type == 'microsoft.network/networksecuritygroups' | extend defaultRulesCount = array_length(properties.defaultSecurityRules), customerRulesCount = array_length(properties.securityRules) | project subscriptionId, resourceGroup, location, name, defaultRulesCount, customerRulesCount"
+    },
+    {
+        "id": "nsg02",
+        "label": "NSGRuleNames",
+        "description": "List NSGs with names of the rules",
+        "usecases": [
+            "WASA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type == 'microsoft.network/networksecuritygroups' | mv-expand rules = array_concat(properties.securityRules, properties.defaultSecurityRules) | mv-expand ruleName = rules.name, ruleDirection = rules.properties.direction, rulePriority = rules.properties.priority | project subscriptionId, resourceGroup, location, nsgName = name, ruleName, ruleDirection, rulePriority"
+    },
+    {
+        "id": "nsg03",
+        "label": "SubnetNSGAssociations",
+        "description": "List all subnets with their NSG associations",
+        "usecases": [
+            "WASA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type == 'microsoft.network/virtualnetworks' | mv-expand sn = properties.subnets | extend subnetName = sn.name | extend nsgName = split(sn.properties.networkSecurityGroup.id, '/')[-1] | project subscriptionId, resourceGroup, location, vnetName = name, subnetName, nsgName"
+    },
+    {
+        "id": "nsg04",
+        "label": "UnusedNSG",
+        "description": "Show unused NSGs",
+        "usecases": [
+            "WACOA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type == 'microsoft.network/networksecuritygroups' | where properties['subnets'][0]['id'] == '' and properties['networkInterfaces'][0]['id'] == ''"
+    }
+]

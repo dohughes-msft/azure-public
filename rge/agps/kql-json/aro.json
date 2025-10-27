@@ -1,0 +1,12 @@
+[   
+    {
+        "id": "aro01",
+        "label": "ARO",
+        "description": "Azure Red Hat OpenShift",
+        "usecases": [
+            "AGPS"
+        ],
+        "table": "resources",
+        "queryBody": "| where type =~ 'microsoft.redhatopenshift/openshiftclusters' | mv-expand wp = properties.workerProfiles | extend nodeName = wp.name, nodeSize = wp.vmSize | project subscriptionId, resourceGroup, name, location, version = properties.clusterProfile.version, nodeName, nodeSize, tags"
+    }
+]

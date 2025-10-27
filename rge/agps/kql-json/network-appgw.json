@@ -1,0 +1,23 @@
+[
+    {
+        "id": "agw01",
+        "label": "AppGw",
+        "description": "Azure Application Gateways",
+        "usecases": [
+            "WARA",
+            "SAPWARR"
+        ],
+        "table": "resources",
+        "queryBody": "| where type =~ 'microsoft.network/applicationgateways' | extend avZones = strcat_array(zones, ',') | extend gatewayType = properties.sku.tier | project subscriptionId, resourceGroup, name, location, sku = properties.sku.name, avZones, gatewayType"
+    },
+    {
+        "id": "agw02",
+        "label": "AppGwEmptyBackendPool",
+        "description": "Application Gateways with empty backend pool",
+        "usecases": [
+            "WACOA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type =~ 'microsoft.network/applicationgateways' | where isempty(properties.backendAddressPools[0].properties.backendAddresses[0])"
+    }
+]

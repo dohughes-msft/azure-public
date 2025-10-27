@@ -1,0 +1,43 @@
+[
+    {
+        "id": "mdsk01",
+        "label": "ManagedDiskVM",
+        "description": "Azure Managed Disks",
+        "usecases": [
+            "WAPA",
+            "AGPS"
+        ],
+        "table": "resources",
+        "queryBody": "| extend lowerId = tolower(id) | join kind=inner (resources | where type == 'microsoft.compute/disks' | extend diskSku = tostring(sku.name) | project diskName = name, diskSku, vmId = tolower(managedBy), sizeGb = properties.diskSizeGB) on $left.lowerId == $right.vmId | project-away vmId | project subscriptionId, vmName = name, location, diskName, diskSku, sizeGb, tags"
+    },
+    {
+        "id": "mdsk02",
+        "label": "ManagedDiskSKU",
+        "description": "Count disks by SKU",
+        "usecases": [
+            "WACOA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type =~ 'microsoft.compute/disks' | project id, sku = tostring(sku.name), env = tostring(tags.environment) | summarize count() by env, sku | order by count_ desc"
+    },
+    {
+        "id": "mdsk03",
+        "label": "UnattachedManagedDisks",
+        "description": "Unattached Managed Disks",
+        "usecases": [
+            "WACOA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type =~ 'microsoft.compute/disks' | where properties.diskState =~ \"unattached\" | extend subId = split(id, \"/\", 2)[0], resourceGroup = split(id, \"/\", 4)[0] | project subId, resourceGroup, name, sku.name, properties.diskSizeGB"
+    },
+    {
+        "id": "mdsk04",
+        "label": "DiskCountByVM",
+        "description": "Disk count by VM",
+        "usecases": [
+            "WACOA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type =~ 'Microsoft.Compute/virtualMachines' | extend lowerId = tolower(id) | join kind=inner (Resources | where type =~ 'Microsoft.Compute/disks' | project disk = name, vm = tolower(tostring(managedBy)) ) on $left.lowerId == $right.vm | summarize disk_count = count() by tostring(name), location, resourceGroup, subscriptionId, tostring(properties.hardwareProfile.vmSize), tostring(properties.storageProfile.imageReference.offer), tostring(properties.osProfile.computerName)"
+    }
+]

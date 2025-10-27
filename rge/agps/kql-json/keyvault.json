@@ -1,0 +1,12 @@
+[
+    {
+        "id": "kv01",
+        "label": "KeyVault",
+        "description": "Azure Key Vaults",
+        "usecases": [
+            "WARA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type =~ 'microsoft.keyvault/vaults' | project subscriptionId, resourceGroup, name, location, sku = properties.sku.name"
+    }
+]

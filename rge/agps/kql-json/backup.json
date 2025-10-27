@@ -1,0 +1,15 @@
+[   
+    {
+        "id": "rsv01",
+        "label": "RecoveryVaults",
+        "description": "Azure Recovery Services Vaults",
+        "usecases": [
+            "WACOA",
+            "WARA",
+            "SAPWARR",
+            "WASA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type == 'microsoft.recoveryservices/vaults' | extend sku = tostring(properties.redundancySettings.standardTierStorageRedundancy) | project subscriptionId, resourceGroup, location, name, sku"
+    }
+]

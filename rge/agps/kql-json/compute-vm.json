@@ -1,0 +1,80 @@
+
+[
+    {
+        "id": "vm01",
+        "label": "VMSummary",
+        "description": "Azure Virtual Machines",
+        "usecases": [
+            "WARA",
+            "SAPWARR",
+            "WACOA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type =~ 'Microsoft.Compute/virtualMachines' | summarize count() by tostring(properties.hardwareProfile.vmSize) | order by count_ desc"
+    },
+    {
+        "id": "vm02",
+        "label": "VMSSSummary",
+        "description": "Azure Virtual Machine Scale Sets",
+        "usecases": [
+            "WARA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type =~ 'Microsoft.Compute/virtualMachineScaleSets' | extend zones = tostring(zones) | extend zones = iif(zones == '', 'None', zones) | project subscriptionId, resourceGroup, name, location, zones"
+    },
+    {
+        "id": "vm03",
+        "label": "VMRedundancy",
+        "description": "Azure Virtual Machines Redundancy",
+        "usecases": [
+            "WARA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type =~ 'Microsoft.Compute/virtualMachines' | extend availabilitySet = split(properties.availabilitySet.id, '/')[-1], availabilityZone = parse_json(zones)[0], vmSize = properties.hardwareProfile.vmSize, PPG = split(properties.proximityPlacementGroup.id, '/')[2] | project subscriptionId, resourceGroup, name, location, vmSize, avSet = iif(availabilitySet == '', 'None', availabilitySet), avZone = iif(availabilityZone == '', 'None', availabilityZone), ppg = iif(PPG == '', 'None', PPG)"
+    },
+    {
+        "id": "vm04",
+        "label": "VMEncryption",
+        "description": "Azure Virtual Machines Encryption at host",
+        "usecases": [
+            "WASA",
+            "SAPWARR"
+        ],
+        "table": "resources",
+        "queryBody": "| where type =~ 'Microsoft.Compute/virtualMachines' | extend encryptionAtHost = iif(properties.securityProfile.encryptionAtHost == 'true', 'true', 'false') | project subscriptionId, resourceGroup, name, location, encryptionAtHost"
+    },
+    {
+        "id": "vm05",
+        "label": "VMBootDiagnostics",
+        "description": "Azure Virtual Machines Boot Diagnostics",
+        "usecases": [
+            "WARA",
+            "SAPWARR",
+            "WASA"
+        ],
+        "table": "resources",
+        "queryBody": "| where type =~ 'Microsoft.Compute/virtualMachines' | extend bootDiagnostics = properties.diagnosticsProfile.bootDiagnostics.enabled | project subscriptionId, resourceGroup, name, location, bootDiagnostics"
+    },
+    {
+        "id": "vm06",
+        "label": "VMAcceleratedNetworking",
+        "description": "Azure Virtual Machines Accelerated Networking",
+        "usecases": [
+            "WAPA",
+            "SAPWARR"
+        ],
+        "table": "resources",
+        "queryBody": "| where type =~ 'Microsoft.Compute/virtualMachines' | extend vmId = tolower(id) | join kind=inner (resources | where type =~ 'Microsoft.Network/networkInterfaces' | extend enableAcceleratedNetworking = properties.enableAcceleratedNetworking | extend ip = properties.ipConfigurations[0].properties.privateIPAddress | project nicName = split(id, '/')[-1], vmId = tolower(tostring(properties.virtualMachine.id)), ip, enableAcceleratedNetworking) on $left.vmId == $right.vmId | project subscriptionId, resourceGroup, vmName = name, nicName, ip, enableAcceleratedNetworking"
+    },
+    {
+        "id": "vm07",
+        "label": "VMDiskSettings",
+        "description": "Azure Virtual Machine Disk Settings",
+        "usecases": [
+            "WAPA",
+            "SAPWARR"
+        ],
+        "table": "resources",
+        "queryBody": "| where type =~ 'Microsoft.Compute/virtualMachines' | extend datadisks = properties.storageProfile.dataDisks | mvexpand datadisks | project subscriptionId, resourceGroup, vmName = name, location, vmtype = properties.hardwareProfile.vmSize, osdisktype = properties.storageProfile.osDisk.managedDisk.storageAccountType, osdisksize = properties.storageProfile.osDisk.diskSizeGB, osdiskcaching = properties.storageProfile.osDisk.caching, datadiskname = datadisks.name, datadisktype = datadisks.managedDisk.storageAccountType, datadisksize = datadisks.diskSizeGB, datadiskcaching = datadisks.caching"
+    }
+]
