@@ -1,0 +1,6 @@
+# Ignore fetched files
+pricing*.json
+locations*.json
+
+# Ignore PowerBI files containing data
+*.pbix
