@@ -40,10 +40,10 @@ The API returns a very large dataset. Splitting by region keeps memory usage man
 Import `FetchPricing.ps1` as a runbook and schedule it to run periodically. Set the parameters:
 
 ```powershell
-.\FetchPricing.ps1 -automationAccount $true
+.\FetchPricing.ps1 -automationAccount $true -storageAccountName <your_storage_account>
 ```
 
-The storage account name is passed as a parameter. The blob container name is hard-coded to `pricing`. The automation account must have:
+The blob container name is hard-coded to `pricing`. The automation account must have:
 
 - A **system-assigned managed identity**
 - The **Storage Blob Data Contributor** role on the target storage account (Owner alone is not sufficient)
@@ -65,6 +65,7 @@ Output files are written to the current directory as `pricing_<region>.json`.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `automationAccount` | bool | `$false` | Run in Azure Automation mode and upload results to blob storage |
+| `storageAccountName` | string |  | The name for the Azure storage account to upload to |
 | `debugMode` | bool | `$false` | Fetch only one region and one page of results for testing |
 
 ## Requirements
