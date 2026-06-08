@@ -1,0 +1,11 @@
+# Config files
+Config/*.json
+
+# Sample config file
+!Config/parameters.sample.json
+
+# Data collection files
+DataCollection/*.csv
+
+# Sample data collection file
+!DataCollection/Sample/*.csv
