@@ -28,7 +28,7 @@ Data Collection is performed via PowerShell scripts that invoke the [Microsoft C
 
 In directory `Config` copy file `parameters.sample.json` to `parameters.json`.
 
-The file contains a single parameter that should be set according to the the desired scope. The example uses billing account:
+The file contains a single required property, `Scope`, that should be set to your desired Cost Management scope. The example uses a billing account:
 
 ```
 {
@@ -56,13 +56,13 @@ There are two scripts to execute. They can be run in any order.
 
 | Script name | Purpose | Syntax | Output file |
 | ----------- | ------- | ------ | ----------- |
-| `Get-SpendByPricingModel.ps1` | Fetches monthly VM spend grouped by pricing model | `.\Get-SpendByPricingModel -parameterFile "..\Config\parameters.json"` | `DataCollection\SpendByPricingModel.csv` |
-| `Get-SpendByVMFamily.ps1` | Last month's PAYG VM spend grouped by meter subcategory | `.\GetSpendByVMFamily.ps1 -parameterFile "..\Config\parameters.json"` | `DataCollection\SpendByVMFamily.csv` |
+| `Get-SpendByPricingModel.ps1` | Fetches monthly amortized spend grouped by pricing model | `.\Get-SpendByPricingModel.ps1 -parameterFile "..\Config\parameters.json"` | `DataCollection\SpendByPricingModel.csv` |
+| `Get-SpendByVMFamily.ps1` | Last month's on-demand VM spend grouped by meter subcategory | `.\Get-SpendByVMFamily.ps1 -parameterFile "..\Config\parameters.json"` | `DataCollection\SpendByVMFamily.csv` |
 
 Both scripts:
 - Use Cost Management query API version 2025-03-01 by default.
-- Resolve scope from a JSON parameter file.
-- Automatically create outputDir if it does not exist.
+- Resolve scope from a JSON parameter file (`Scope` property).
+- Automatically create `outputDir` if it does not exist.
 
 ### Output
 
@@ -81,7 +81,7 @@ By default, CSVs are written to DataCollection:
 
 Shared parameters:
 
-- parametersFile
+- parameterFile
   - Default: Config\parameters.json
 - months
   - Pricing model script default: 6
@@ -92,19 +92,20 @@ Shared parameters:
 - outputFile
   - Pricing model default: SpendByPricingModel.csv
   - VM family default: SpendByVMFamily.csv
+  - If `outputFile` is a relative path, it is written under `outputDir`.
 - apiVersion
   - Default: 2025-03-01
 
 ## Troubleshooting
 
 - Parameters file not found
-  - Verify the path passed to -parametersFile.
+  - Verify the path passed to `-parameterFile`.
 
-- BillingAccountId required
-  - Ensure Scope is BillingAccount and BillingAccountId is set.
+- Scope is required
+  - Ensure `Scope` is present and non-empty in Config\parameters.json.
 
 - Authorization or 403 errors
-  - Confirm your identity has Cost Management access at the billing account scope.
+  - Confirm your identity has Cost Management access at the scope in `Scope`.
 
 - Throttling (429) or transient API errors
   - Scripts already retry with backoff; rerun if needed.
