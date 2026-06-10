@@ -1,4 +1,0 @@
-{
-    "Scope": "/providers/Microsoft.Billing/billingAccounts/123123123",
-    "_comment": "For supported scope types see: https://learn.microsoft.com/en-us/rest/api/cost-management/query/usage#uri-parameters"
-}
