@@ -1,0 +1,11 @@
+{
+  "$schema": "./parameters.schema.json",
+  "billing_account_id": "<billing-account-id>",
+  "billing_profile_id": "<billing-profile-id>",
+  "state": {
+    "storage_account": "<storage-account-name>",
+    "budget_table": "AmortizedBudgetConfig",
+    "alert_state_table": "AmortizedBudgetAlertState"
+  },
+  "_comment": "This file is only used for ExecutionMode=Local. In AzureAutomation mode, the parameters are set in the Automation Account variables."
+}
