@@ -5,6 +5,7 @@ Azure does not currently support setting budgets based on amortized spend, only 
 * Works with MCA (not EA)
 * Works with month-to-date spend (i.e. monthly budget)
 * Works at subscription level
+* Works with a single email recipent
 * Only alerts based on actual spend (not forecasted)
 
 The script can be run in the following modes:
