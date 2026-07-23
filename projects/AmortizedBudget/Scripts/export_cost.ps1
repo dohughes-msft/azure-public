@@ -404,7 +404,7 @@ if ([string]::IsNullOrWhiteSpace($billingAccountId) -or [string]::IsNullOrWhiteS
 
 # Parse dates
 $today = (Get-Date).ToUniversalTime().Date
-$periodStart = $today.AddMonths(-1)
+$periodStart = $today.AddDays(-($today.Day - 1))
 $periodEnd = $today.AddDays(-1)
 
 if (-not [string]::IsNullOrWhiteSpace($StartDate)) {

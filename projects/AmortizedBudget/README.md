@@ -20,7 +20,7 @@ The script can be run in the following modes:
 
 Roles needed:
 * If the [Cost Management API](https://learn.microsoft.com/en-us/rest/api/cost-management/query/usage) is used then the user or automation account must have role Billing Profile Reader
-* If AzureTable storage is used for budgets and/or state then the user of automation account must have role Storage Table Data Contributor on the storage account
+* If AzureTable storage is used for budgets and/or state then the user or automation account must have role Storage Table Data Contributor on the storage account
 
 ## Script flow
 

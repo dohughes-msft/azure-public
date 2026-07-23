@@ -1343,7 +1343,7 @@ foreach ($subId in @($spendBySubscription.Keys)) {
 
                 $dedupeKey = Get-AlertDedupeKey -SubscriptionId $subId -BudgetName $budgetName -Threshold ([double]$threshold) -Period $periodKey
                 $alertAlreadySent = $false
-                if ($dedupeMode -eq "table") {
+                if ($dedupeMode -eq "AzureTable") {
                     $dedupePartitionKey = "{0}:{1}" -f $statePartitionPrefix, $periodKey
                     $dedupeRowKey = Convert-AlertDedupeKeyToRowKey -DedupeKey $dedupeKey
                     $alertAlreadySent = Test-AlertAlreadySentInTable -Token $stateTableToken -StorageAccount $stateStorageAccount -TableName $alertStateTableName -PartitionKey $dedupePartitionKey -RowKey $dedupeRowKey
@@ -1391,7 +1391,7 @@ foreach ($subId in @($spendBySubscription.Keys)) {
                 }
 
                 if ([string]$deliveryResult.status -in @("sent", "suppressed", "skipped", "failed")) {
-                    if ($dedupeMode -eq "table") {
+                    if ($dedupeMode -eq "AzureTable") {
                         $dedupePartitionKey = "{0}:{1}" -f $statePartitionPrefix, $periodKey
                         $dedupeRowKey = Convert-AlertDedupeKeyToRowKey -DedupeKey $dedupeKey
                         $inserted = Register-SentAlertInTable -Token $stateTableToken -StorageAccount $stateStorageAccount -TableName $alertStateTableName -Entity @{
