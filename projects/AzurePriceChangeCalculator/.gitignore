@@ -1,0 +1,12 @@
+# Data used during preparation
+BillingMeterPreparation/json/*
+BillingMeterPreparation/csv/*
+
+# Maintainer regression tests
+BillingMeterPreparation/Tests
+
+# Usage files - containing sensitive customer data
+UsageFiles*/
+
+# Power BI reports which may contain sensitive data
+*.pbix
