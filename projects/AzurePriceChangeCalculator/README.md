@@ -6,7 +6,7 @@ Microsoft has announced several changes to Azure pricing that are scheduled to t
 
 **Ways to use this project**
 
-1. You can bring your own usage data and use the Power BI template to calculate the effects of the price increases. Or,
+1. The main intention is that you bring your own usage data and use the Power BI template to calculate the effects of the price increases. Or,
 2. You can just take the billing meter ID data to lift into your own reports, and ignore the other components.
 
 **Most report users only need to place their usage export in the appropriate folder, open the report, and refresh it.** PowerShell, Python, and Excel are not required.
