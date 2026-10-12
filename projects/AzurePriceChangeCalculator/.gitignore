@@ -6,7 +6,7 @@ BillingMeterPreparation/csv/*
 BillingMeterPreparation/Tests
 
 # Usage files - containing sensitive customer data
-UsageFiles*/
+UsageFiles*/*
 
 # Power BI reports which may contain sensitive data
 *.pbix

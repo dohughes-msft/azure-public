@@ -1,0 +1,3 @@
+# Ignore generated content in this directory
+*
+!.gitignore
