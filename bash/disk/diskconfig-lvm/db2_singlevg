@@ -1,7 +1,0 @@
-[volumegroups]
-0,SIDvg
-
-[filesystems]
-SIDvg,SIDusrsaplv,/usr/sap/SID,5
-SIDvg,SIDsapmntlv,/sapmnt/SID,5
-SIDvg,SIDdb2lv,/db2/SID,90

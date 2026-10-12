@@ -1,8 +1,0 @@
-# Global variables
-location = "swedencentral"
-admin_username = "adminuser"
-#admin_password = "P4ssword!!!!"
-global_label = "microhack"
-group_label = "group1"
-workload_host_size = "Standard_D2s_v5"
-migration_host_size = "Standard_D4s_v5"

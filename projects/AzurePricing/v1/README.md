@@ -65,7 +65,7 @@ Output files are written to the current directory as `pricing_<region>.json`.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `automationAccount` | bool | `$false` | Run in Azure Automation mode and upload results to blob storage |
-| `storageAccountName` | string |  | The name of the Azure storage account to upload to |
+| `storageAccountName` | string |  | The name for the Azure storage account to upload to |
 | `debugMode` | bool | `$false` | Fetch only one region and one page of results for testing |
 
 ## Requirements
