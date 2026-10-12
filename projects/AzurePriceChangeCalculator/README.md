@@ -54,7 +54,7 @@ Resources affected by the first change are excluded from the second.
 Keep the template, master data, and usage folders together:
 
 ```text
-AzurePriceChangesFeb2027/
+AzurePriceChangeCalculator/
 |-- Azure Price Change Calculator.pbit
 |-- BillingMeterPreparation (see separate documentation)
 |-- MasterData/
@@ -66,10 +66,10 @@ AzurePriceChangesFeb2027/
 
 ## 1. Download the project files
 
-1. Download the [repository as a ZIP file](https://github.com/dohughes-msft/azure/archive/refs/heads/main.zip).
+1. Download the [repository as a ZIP file](https://github.com/dohughes-msft/azure-public/archive/refs/heads/master.zip).
 2. Extract the ZIP file.
-3. Locate `azure-main\projects\AzurePriceChangesFeb2027`.
-4. Copy the entire `AzurePriceChangesFeb2027` folder to a local working location, preserving its folder structure.
+3. Locate `azure-public-master\projects\AzurePriceChangeCalculator`.
+4. Copy the entire `AzurePriceChangeCalculator` folder to a local working location, preserving its folder structure.
 
 Keep the Power BI template, `MasterData`, and usage folders together. Do not download or move the individual files separately, because the report relies on their relative locations.
 
