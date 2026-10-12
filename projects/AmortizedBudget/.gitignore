@@ -1,0 +1,18 @@
+# Ignore all config files in this project except the sample template.
+Config/*
+!Config/parameters.sample.json
+
+# Ignore all data except sample data
+LocalData/*
+!LocalData/budgets.sample.json
+!LocalData/spend.sample.json
+
+# Ignore generated run logs.
+Logs/
+logs/
+*.log
+*.log.*
+*.jsonl
+
+# Ignore persisted workflow dedupe state.
+.state/
