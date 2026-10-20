@@ -111,7 +111,7 @@ Overage: $25 per hour, charged as OnDemand
 Resource price after increase: $60 + $25 = $85 per hour
 ```
 
-**Result:** The resource costs $60 + $25 = **$85 per hour**, an increase of **$25 per hour** or **41.6%**.
+**Result:** The resource costs $60 + $25 = **$85 per hour**, an increase of **$25 per hour** or **41.67%**.
 
 You can contain the price increase by purchasing an extra savings plan to cover it:
 
