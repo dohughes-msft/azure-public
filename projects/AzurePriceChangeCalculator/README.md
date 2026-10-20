@@ -4,6 +4,8 @@
 
 Microsoft has announced several changes to Azure pricing that are scheduled to take effect on February 1st 2027. This project aims to give customers an accurate way to calculate the impact.
 
+[Here are some simple examples](EXAMPLES.md) that show how price increases have different impact depending on the pricing model in use.
+
 **Ways to use this project**
 
 1. The main intention is that you bring your own usage data and use the Power BI template to calculate the effects of the price increases. Or,
